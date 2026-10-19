@@ -1,8 +1,7 @@
--- Acciones: definición de las acciones de referencia
--- (se aplican en claves.sql, en cada FOREIGN KEY de CICLO_1)
---
+-- Acciones: definición de las acciones de referencia, se aplican en claves.sql, en cada FOREIGN KEY de CICLO_1
+
 -- Las acciones se definen en las claves foráneas de la sección 2:
---
+
 --   Torneos.videojuego         -> Videojuegos   ON DELETE RESTRICT  ON UPDATE CASCADE
 --   Premios.idTorneo           -> Torneos       ON DELETE CASCADE   ON UPDATE CASCADE
 --   Partidas.torneo            -> Torneos       ON DELETE CASCADE   ON UPDATE CASCADE
