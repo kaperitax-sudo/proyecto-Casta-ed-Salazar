@@ -16,7 +16,7 @@ INSERT INTO Clasificacion VALUES (190, 190);
 DELETE FROM Torneos WHERE idTorneo = 190;
 SELECT (SELECT COUNT(*) FROM Premios       WHERE idTorneo = 190) AS premios,
        (SELECT COUNT(*) FROM Partidas      WHERE torneo   = 190) AS partidas,
-       (SELECT COUNT(*) FROM Clasificacion WHERE torneo   = 190) AS clasificacion;   -- 0, 0, 0
+       (SELECT COUNT(*) FROM Clasificacion WHERE torneo   = 190) AS clasificacion;   
 -- Con el torneo borrado, el videojuego 91 ya puede eliminarse
 DELETE FROM Videojuegos WHERE idVideojuego = 91;
 
@@ -30,7 +30,7 @@ SELECT id_participante, clasificacion FROM Participantes WHERE id_participante =
 INSERT INTO PartidasHechas VALUES (103, 101);
 DELETE FROM Participantes WHERE id_participante = 103;
 SELECT (SELECT COUNT(*) FROM Jugador         WHERE id_participante = 103) AS jugador,
-       (SELECT COUNT(*) FROM PartidasHechas  WHERE participante    = 103) AS partidashechas;   -- 0, 0
+       (SELECT COUNT(*) FROM PartidasHechas  WHERE participante    = 103) AS partidashechas;   
 
 -- ON DELETE SET NULL (equipo): los jugadores del equipo quedan sin equipo
 DELETE FROM Equipo WHERE id_participante = 101;
