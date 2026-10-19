@@ -1,4 +1,4 @@
--- Disparadores: definición de disparadores (automatización y reglas entre tablas)
+-- Disparadores: definición de disparadores 
 
 -- Partidas: genera el id si llega NULL
 CREATE OR REPLACE FUNCTION fn_partidas_id() RETURNS TRIGGER AS $$
