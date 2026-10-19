@@ -1,5 +1,4 @@
 -- 1. Dominios 
--- Identificador generico usado por todas las <<I>> del modelo
 CREATE DOMAIN Tid AS INTEGER
     CHECK (VALUE > 0);
 
