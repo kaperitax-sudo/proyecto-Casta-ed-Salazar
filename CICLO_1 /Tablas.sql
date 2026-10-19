@@ -16,7 +16,8 @@ CREATE TABLE Torneos (
 CREATE TABLE Premios (
     idPremio     Tid      NOT NULL,
     tipoPremio   Tpremio  NOT NULL,
-    idTorneo     Tid      NOT NULL
+    idTorneo     Tid      NOT NULL,
+    idParticipante Tid    NOT NULL -- agregado
 );
 
 CREATE TABLE Partidas (
