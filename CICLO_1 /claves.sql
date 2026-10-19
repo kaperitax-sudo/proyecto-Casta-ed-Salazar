@@ -30,6 +30,7 @@ ALTER TABLE Jugador ADD CONSTRAINT FK_jugador_participante FOREIGN KEY (id_parti
 ALTER TABLE Jugador ADD CONSTRAINT FK_jugador_equipo FOREIGN KEY (equipo) REFERENCES Equipo (id_participante) ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE PartidasHechas ADD CONSTRAINT FK_ph_participantes FOREIGN KEY (participante) REFERENCES Participantes (id_participante) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE PartidasHechas ADD CONSTRAINT FK_ph_partida FOREIGN KEY (partida) REFERENCES Partidas (idPartida) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE Premios ADD CONSTRAINT FK_Premios_Participante FOREIGN KEY (idParticipante) REFERENCES Participantes (id_participante)  ON DELETE CASCADE ON UPDATE CASCADE; -- Agregado
 
 
 
