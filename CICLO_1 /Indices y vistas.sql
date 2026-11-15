@@ -1,8 +1,6 @@
 -- Índices y Vistas: Definición de índices de rendimiento y vistas de consulta
 
--- ==========================================
 -- ÍNDICES
--- ==========================================
 
 -- Índice para búsquedas frecuentes sobre bienes dado un rango de precios
 CREATE INDEX idx_bienes_precio ON Videojuegos (tipoVideojuego); -- Ajustado a las tablas actuales de tu dominio
@@ -14,11 +12,9 @@ CREATE INDEX idx_partidas_fecha ON Partidas (fecha);
 CREATE INDEX idx_jugador_correo ON Jugador (correo);
 
 
--- ==========================================
 -- VISTAS
--- ==========================================
 
--- Vista de solo lectura para consultar información consolidada de jugadores/participantes
+-- Vista de solo lectura para consultar la información de jugadores/participantes
 CREATE OR REPLACE VIEW VParticipantesDetalle AS
 SELECT 
     p.id_participante,
