@@ -1,6 +1,6 @@
 -- Seguridad: Definición de roles y permisos de acceso
 
--- Creación de roles de base de datos según los actores del sistema
+-- Creación de roles de base de datos según los actores 
 CREATE ROLE rol_gerente;
 CREATE ROLE rol_jugador;
 
