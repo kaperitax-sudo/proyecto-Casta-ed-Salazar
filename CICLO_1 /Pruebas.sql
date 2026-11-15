@@ -1,4 +1,4 @@
--- Pruebas: Historias complementarias de integración
+-- Pruebas: Historias complementarias 
 
 -- Historia 1: Registro completo de un torneo con sus respectivos participantes y partidas iniciales
 INSERT INTO Videojuegos VALUES (50, 'Cyber Game', 'RPG');
