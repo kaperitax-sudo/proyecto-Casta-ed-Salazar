@@ -1,4 +1,4 @@
--- Componentes: Implementación de servicios de negocio (CRUD y Consultas con refcursor)
+-- Componentes: Implementación de servicios de negocio 
 
 -- Servicio: Consultar torneos activos o información general
 CREATE OR REPLACE FUNCTION sv_torneos_consultar(p_cursor REFCURSOR)
@@ -11,7 +11,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Servicio: Adicionar una nueva partida garantizando integridad procedimental
+-- Servicio: Adicionar una nueva partida 
 CREATE OR REPLACE PROCEDURE sv_partidas_adicionar(
     p_idPartida Tid,
     p_resultado Tresultado,
