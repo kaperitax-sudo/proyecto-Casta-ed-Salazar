@@ -1,5 +1,0 @@
-CREATE TABLE Premios(
-    idPremio VARCHAR(100) NOT NULL
-    tipoPremio VARCHAR(100) NOT NULL
-    idTorneo VARCHAR(100) NOT NULL
-)
