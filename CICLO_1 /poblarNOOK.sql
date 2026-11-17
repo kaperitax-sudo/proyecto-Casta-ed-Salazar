@@ -3,7 +3,7 @@
 -- Dominio Tvideojuego no admite este valor
 INSERT INTO Videojuegos VALUES (3, 'Puzzle Quest', 'Puzzle');
 
--- Dominio Tid exige valor positivo
+-- Dominio Tid_ exige valor positivo
 INSERT INTO Torneos VALUES (-1, 10, '2026-01-01', 'Individual', 1);
 
 -- Nulidad: tipo_torneo es NOT NULL y no se envía
@@ -14,7 +14,7 @@ VALUES (6, 10, '2026-01-01', 1);
 INSERT INTO Videojuegos VALUES (1, 'Duplicado', 'FPS');
 
 -- Clave foránea inválida: idTorneo 999 no existe
-INSERT INTO Premios VALUES (10, 'Dinero', 999);
+INSERT INTO Premios VALUES (10, 'Dinero', 999, 1);
 
 -- Dominio Tedad fuera de rango (10-99)
 INSERT INTO Jugador VALUES (5, 'pedro.gomez@example.com', 5, NULL);
