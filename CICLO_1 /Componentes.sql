@@ -13,11 +13,11 @@ $$ LANGUAGE plpgsql;
 
 -- Servicio: Adicionar una nueva partida 
 CREATE OR REPLACE PROCEDURE sv_partidas_adicionar(
-    p_idPartida Tid,
+    p_idPartida Tid_,
     p_resultado Tresultado,
     p_puntaje INTEGER,
     p_fecha DATE,
-    p_torneo Tid
+    p_torneo Tid_
 )
 AS $$
 BEGIN
