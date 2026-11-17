@@ -1,5 +1,5 @@
 -- 1. Dominios 
-CREATE DOMAIN Tid AS INTEGER
+CREATE DOMAIN Tid_ AS INTEGER
     CHECK (VALUE > 0);
 
 -- Resultado de una partida
@@ -25,4 +25,3 @@ CREATE DOMAIN Tcorreo AS VARCHAR(100)
 -- Edad del jugador 
 CREATE DOMAIN Tedad AS SMALLINT
     CHECK (VALUE BETWEEN 10 AND 99);
-    
