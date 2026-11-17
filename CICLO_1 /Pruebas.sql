@@ -1,7 +1,7 @@
 -- Pruebas: Historias complementarias 
 
 -- Historia 1: Registro completo de un torneo con sus respectivos participantes y partidas iniciales
-INSERT INTO Videojuegos VALUES (50, 'Cyber Game', 'RPG');
+INSERT INTO Videojuegos VALUES (50, 'Cyber Game', 'Estrategia');
 INSERT INTO Torneos VALUES (501, 4, '2099-08-01', 'PorEquipos', 50);
 
 -- Historia 2: Consulta gerencial de validación cruzada de puntajes
