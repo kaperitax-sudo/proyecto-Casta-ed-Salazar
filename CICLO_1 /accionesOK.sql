@@ -10,7 +10,7 @@ SELECT idTorneo, videojuego FROM Torneos WHERE idTorneo = 190;   -- videojuego =
 DELETE FROM Videojuegos WHERE idVideojuego = 91;
 
 -- ON DELETE CASCADE (torneo): se borran sus premios, partidas y clasificación
-INSERT INTO Premios VALUES (190, 'Trofeo', 190);
+INSERT INTO Premios VALUES (190, 'Trofeo', 190, 101);   -- premio del participante 101
 INSERT INTO Partidas VALUES (190, 'Victoria', 7, '2099-05-02', 190);
 INSERT INTO Clasificacion VALUES (190, 190);
 DELETE FROM Torneos WHERE idTorneo = 190;
