@@ -3,7 +3,7 @@
 -- ÍNDICES
 
 -- Índice para búsquedas frecuentes sobre bienes dado un rango de precios
-CREATE INDEX idx_bienes_precio ON Videojuegos (tipoVideojuego); -- Ajustado a las tablas actuales de tu dominio
+CREATE INDEX idx_bienes_precio ON Videojuegos (tipoVideojuego); 
 
 -- Índice para consultas sobre partidas/ventas en fechas específicas
 CREATE INDEX idx_partidas_fecha ON Partidas (fecha);
