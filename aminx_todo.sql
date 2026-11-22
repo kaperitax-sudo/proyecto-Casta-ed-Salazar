@@ -1,6 +1,5 @@
 -- dominios
 
--- 1. Dominios 
 CREATE DOMAIN Tid_ AS INTEGER
     CHECK (VALUE > 0);
 
@@ -27,6 +26,7 @@ CREATE DOMAIN Tcorreo AS VARCHAR(100)
 -- Edad del jugador 
 CREATE DOMAIN Tedad AS SMALLINT
     CHECK (VALUE BETWEEN 10 AND 99);
+
 
 -- Tablas
 
@@ -102,15 +102,15 @@ CREATE TABLE PartidasHechas (
     
 );
 
+
 -- restricciones
 
 ALTER TABLE Torneos ADD CONSTRAINT chk_torenosParticipantes CHECK (participantes > 0);
 ALTER TABLE Partidas ADD CONSTRAINT chk_partidasPuntajes CHECK (puntaje >= 0);
 ALTER TABLE Equipo ADD CONSTRAINT chk_EquipoIntegrantes CHECK ( no_integrantes > 0);
 
--- Primarias
 
--- Primarias: definición de claves primarias
+-- Primarias
 
 ALTER TABLE Videojuegos ADD CONSTRAINT PK_Videojuegos PRIMARY KEY (idVideojuego);
 ALTER TABLE Torneos ADD CONSTRAINT PK_Torneos PRIMARY KEY (idTorneo);
@@ -123,18 +123,15 @@ ALTER TABLE Equipo ADD CONSTRAINT PK_Equipo PRIMARY KEY(id_participante);
 ALTER TABLE Jugador ADD CONSTRAINT PK_jugador PRIMARY KEY (id_participante);
 ALTER TABLE PartidasHechas ADD CONSTRAINT PK_partidasHechas PRIMARY KEY(Participante , partida);
 
--- Unicas
 
--- Unicas: definición de claves únicas
+-- Unicas
 
 ALTER TABLE Jugador ADD CONSTRAINT UK_correo_jugador UNIQUE(correo);
 ALTER TABLE Participantes ADD CONSTRAINT UK_participantes_inscripcion UNIQUE(inscripcion);
 ALTER TABLE Participantes ADD CONSTRAINT UK_participantes_clasificados UNIQUE(clasificacion);
 
--- Foraneas
 
--- Foraneas: definición de claves foráneas
--- (las acciones de referencia se agregan en acciones.sql)
+-- Foraneas
 
 ALTER TABLE Torneos ADD CONSTRAINT FK_torneos_videojuego FOREIGN KEY (videojuego) REFERENCES Videojuegos (idVideojuego);
 ALTER TABLE Premios ADD CONSTRAINT FK_Premios_Torneo FOREIGN KEY (idTorneo) REFERENCES Torneos (idTorneo);
@@ -150,16 +147,15 @@ ALTER TABLE PartidasHechas ADD CONSTRAINT FK_ph_participantes FOREIGN KEY (parti
 ALTER TABLE PartidasHechas ADD CONSTRAINT FK_ph_partida FOREIGN KEY (partida) REFERENCES Partidas (idPartida);
 ALTER TABLE Premios ADD CONSTRAINT FK_Premios_Participante FOREIGN KEY (idParticipante) REFERENCES Participantes (id_participante);
 
--- poblarOK
 
--- PoblarOK: ingreso de datos correctos (sin automatización)
+-- poblarOK
 
 INSERT INTO Videojuegos VALUES (1, 'League of Aeons', 'MOBA');
 INSERT INTO Videojuegos VALUES (2, 'Rift Strikers', 'FPS');
 
 INSERT INTO Torneos VALUES (1, 32, '2026-10-01', 'PorEquipos', 1);
 INSERT INTO Torneos VALUES (2, 16, '2026-11-05', 'Individual', 2);
-INSERT INTO Torneos VALUES (3, 16, '2099-12-01', 'Individual', 2);   -- torneo futuro, con cupos disponibles
+INSERT INTO Torneos VALUES (3, 16, '2099-12-01', 'Individual', 2);
 
 INSERT INTO Partidas VALUES (1, 'Victoria', 10, '2026-10-02', 1);
 INSERT INTO Partidas VALUES (2, 'Derrota', 0, '2026-10-02', 1);
@@ -197,9 +193,8 @@ INSERT INTO PartidasHechas VALUES (1, 1);
 INSERT INTO PartidasHechas VALUES (1, 2);
 INSERT INTO PartidasHechas VALUES (4, 3);
 
--- ConsultasOperativas
 
--- Consultas operativas (usuario)
+-- ConsultasOperativas
 
 -- CO1: Consultar los torneos disponibles
 SELECT t.idTorneo, v.nombre AS videojuego, t.tipo_torneo, t.fecha_inicio,
@@ -291,9 +286,8 @@ WHERE c.torneo = 1   -- idTorneo a consultar
 GROUP BY p.id_participante, p.nombre
 ORDER BY posicion, p.nombre;
 
--- Consultas_gerenciales
 
--- Consultas gerenciales (administrador)
+-- Consultas_gerenciales
 
 -- CG1: Consultar torneos con mayor número de inscritos
 SELECT t.idTorneo, v.nombre AS videojuego, t.tipo_torneo, t.fecha_inicio,
@@ -333,9 +327,8 @@ LEFT JOIN Inscripciones i ON i.torneo = t.idTorneo
 GROUP BY v.idVideojuego, v.nombre, v.tipoVideojuego
 ORDER BY total_inscripciones DESC, v.nombre;
 
--- tuplas
 
--- Tuplas: definición de las restricciones que implican más de un atributo
+-- tuplas
 
 -- Un torneo individual necesita al menos 2 participantes. Uno por equipos o mixto, al menos 4
 ALTER TABLE Torneos ADD CONSTRAINT ck_torneos_tipo_participantes CHECK (
@@ -354,10 +347,8 @@ ALTER TABLE Jugador ADD CONSTRAINT ck_jugador_equipo_distinto CHECK (
     equipo IS NULL OR equipo <> id_participante
 );
 
--- acciones
 
--- Acciones: definición de las acciones de referencia
--- Se redefine cada clave foránea con su ON DELETE / ON UPDATE
+-- acciones
 
 ALTER TABLE Torneos
     DROP CONSTRAINT FK_torneos_videojuego,
@@ -424,9 +415,8 @@ ALTER TABLE Premios
     ADD CONSTRAINT FK_Premios_Participante FOREIGN KEY (idParticipante) REFERENCES Participantes (id_participante)
         ON DELETE CASCADE ON UPDATE CASCADE;
 
--- disparadores
 
--- Disparadores: definición de disparadores 
+-- disparadores
 
 -- Partidas: genera el id si llega NULL
 CREATE OR REPLACE FUNCTION fn_partidas_id() RETURNS TRIGGER AS $$
@@ -533,9 +523,8 @@ CREATE TRIGGER trg_jugador_cupo_equipo
     BEFORE INSERT OR UPDATE OF equipo ON Jugador
     FOR EACH ROW EXECUTE FUNCTION fn_jugador_cupo_equipo();
 
--- tuplasOK
 
--- TuplasOK: ingreso de datos correctos respecto a las restricciones de tupla
+-- tuplasOK
 
 INSERT INTO Torneos VALUES (101, 8,  '2099-01-10', 'Individual', 1);
 INSERT INTO Torneos VALUES (102, 16, '2099-02-10', 'PorEquipos', 1);
@@ -555,29 +544,23 @@ INSERT INTO Equipo VALUES (101, 3);
 INSERT INTO Jugador VALUES (102, 'beta@example.com',  20, 101);
 INSERT INTO Jugador VALUES (103, 'gamma@example.com', 21, NULL);
 
+
 -- accionesOK
 
--- AccionesOK: casos que prueban las acciones de referencia
--- (usa sus propios datos, no depende de otros archivos de prueba)
-
--- ON UPDATE CASCADE: al cambiar el id del videojuego, el torneo lo sigue
 INSERT INTO Videojuegos VALUES (90, 'Test Game', 'FPS');
 INSERT INTO Torneos VALUES (190, 8, '2099-05-01', 'Individual', 90);
 UPDATE Videojuegos SET idVideojuego = 91 WHERE idVideojuego = 90;
-SELECT idTorneo, videojuego FROM Torneos WHERE idTorneo = 190;   -- videojuego = 91
+SELECT idTorneo, videojuego FROM Torneos WHERE idTorneo = 190;
 
--- ON DELETE RESTRICT: el borrado debe ser rechazado (se captura el error para que el script siga)
 DO $$
 BEGIN
     DELETE FROM Videojuegos WHERE idVideojuego = 91;
-    RAISE NOTICE 'FALLO: el RESTRICT dejó borrar el videojuego 91';
-EXCEPTION
-    WHEN foreign_key_violation THEN
-        RAISE NOTICE 'OK: el RESTRICT impidió borrar el videojuego 91';
+    RAISE NOTICE 'FALLA: el RESTRICT dejó borrar el videojuego 91';
+EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE 'PASA: %', SQLERRM;
 END;
 $$;
 
--- Datos para las pruebas con participantes: un equipo (191) y dos jugadores (192, 193)
 INSERT INTO Videojuegos VALUES (92, 'Test Arena', 'MOBA');
 INSERT INTO Torneos VALUES (191, 8, '2099-06-01', 'PorEquipos', 92);
 INSERT INTO Inscripciones VALUES (191, '2099-05-01', 191);
@@ -590,37 +573,31 @@ INSERT INTO Equipo VALUES (191, 3);
 INSERT INTO Jugador VALUES (192, 'rho@example.com',   20, 191);
 INSERT INTO Jugador VALUES (193, 'sigma@example.com', 21, NULL);
 
--- ON DELETE CASCADE (torneo): se borran sus premios, partidas y clasificación
 INSERT INTO Premios VALUES (190, 'Trofeo', 190, 191);
 INSERT INTO Partidas VALUES (190, 'Victoria', 7, '2099-05-02', 190);
 INSERT INTO Clasificacion VALUES (190, 190);
 DELETE FROM Torneos WHERE idTorneo = 190;
 SELECT (SELECT COUNT(*) FROM Premios       WHERE idTorneo = 190) AS premios,
        (SELECT COUNT(*) FROM Partidas      WHERE torneo   = 190) AS partidas,
-       (SELECT COUNT(*) FROM Clasificacion WHERE torneo   = 190) AS clasificacion;   -- 0, 0, 0
--- Con el torneo borrado, el videojuego 91 ya puede eliminarse
+       (SELECT COUNT(*) FROM Clasificacion WHERE torneo   = 190) AS clasificacion;
 DELETE FROM Videojuegos WHERE idVideojuego = 91;
 
--- ON DELETE SET NULL (clasificación): el participante queda sin clasificación
 INSERT INTO Clasificacion VALUES (191, 191);
 UPDATE Participantes SET clasificacion = 191 WHERE id_participante = 192;
 DELETE FROM Clasificacion WHERE idClasificacion = 191;
-SELECT id_participante, clasificacion FROM Participantes WHERE id_participante = 192;   -- NULL
+SELECT id_participante, clasificacion FROM Participantes WHERE id_participante = 192;
 
--- ON DELETE CASCADE (participante): se borran su fila de Jugador y sus PartidasHechas
 INSERT INTO Partidas VALUES (191, 'Victoria', 5, '2099-06-02', 191);
 INSERT INTO PartidasHechas VALUES (193, 191);
 DELETE FROM Participantes WHERE id_participante = 193;
 SELECT (SELECT COUNT(*) FROM Jugador        WHERE id_participante = 193) AS jugador,
-       (SELECT COUNT(*) FROM PartidasHechas WHERE participante    = 193) AS partidashechas;   -- 0, 0
+       (SELECT COUNT(*) FROM PartidasHechas WHERE participante    = 193) AS partidashechas;
 
--- ON DELETE SET NULL (equipo): los jugadores del equipo quedan sin equipo
 DELETE FROM Equipo WHERE id_participante = 191;
-SELECT id_participante, equipo FROM Jugador WHERE id_participante = 192;   -- NULL
+SELECT id_participante, equipo FROM Jugador WHERE id_participante = 192;
+
 
 -- disparadoresOK
-
--- DisparadoresOK: ingreso de datos usando la automatización de los disparadores
 
 INSERT INTO Torneos VALUES (201, 4, '2099-06-01', 'Individual', 1);
 
@@ -647,9 +624,8 @@ INSERT INTO Participantes VALUES (203, 'Jugador Zeta',  204, NULL);
 INSERT INTO Equipo VALUES (201, 1);                           -- equipo de 1 integrante
 INSERT INTO Jugador VALUES (202, 'eps@example.com', 23, 201); -- ocupa el único cupo
 
--- Indices y vistas
 
--- Índices y Vistas: Definición de índices de rendimiento y vistas de consulta
+-- Indices y vistas
 
 -- ÍNDICES
 
@@ -661,6 +637,7 @@ CREATE INDEX idx_partidas_fecha ON Partidas (fecha);
 
 -- Índice alternativo para mejorar búsquedas por correo de jugadores
 CREATE INDEX idx_jugador_correo ON Jugador (correo);
+
 
 -- VISTAS
 
@@ -675,53 +652,42 @@ SELECT
 FROM Participantes p
 JOIN Jugador j ON p.id_participante = j.id_participante;
 
+
 -- IndicesVistasOK
 
--- IndicesVistasOK: consultas que requieren los índices y las vistas definidos
--- (se ejecuta después de poblarOK.sql)
-
--- idx_videojuegos_tipo: videojuegos de un tipo
 SELECT idVideojuego, nombre, tipoVideojuego
   FROM Videojuegos
  WHERE tipoVideojuego = 'MOBA';
 
--- idx_partidas_fecha: partidas jugadas en un rango de fechas
 SELECT idPartida, torneo, resultado, puntaje, fecha
   FROM Partidas
  WHERE fecha BETWEEN '2026-10-01' AND '2026-10-31'
  ORDER BY fecha;
 
--- idx_jugador_correo: jugador por su correo
 SELECT id_participante, correo, edad, equipo
   FROM Jugador
  WHERE correo = 'ana.torres@example.com';
 
--- VParticipantesDetalle: todos los jugadores con su información
 SELECT *
   FROM VParticipantesDetalle
  ORDER BY id_participante;
 
--- VParticipantesDetalle: jugadores de un equipo
 SELECT id_participante, nombre_participante, correo, edad
   FROM VParticipantesDetalle
  WHERE equipo = 1;
 
--- VParticipantesDetalle: jugadores sin equipo
 SELECT id_participante, nombre_participante, correo
   FROM VParticipantesDetalle
  WHERE equipo IS NULL;
 
--- Verificación: con pocas filas PostgreSQL prefiere recorrer la tabla completa,
--- por eso se desactiva el recorrido secuencial para ver que se usa cada índice
 SET enable_seqscan = off;
 EXPLAIN SELECT * FROM Videojuegos WHERE tipoVideojuego = 'MOBA';
 EXPLAIN SELECT * FROM Partidas WHERE fecha BETWEEN '2026-10-01' AND '2026-10-31';
 EXPLAIN SELECT * FROM Jugador WHERE correo = 'ana.torres@example.com';
 RESET enable_seqscan;
 
--- Componentes
 
--- Package
+-- Componentes
 
 -- PC_TORNEO
 CREATE SCHEMA IF NOT EXISTS PC_TORNEO;
@@ -1373,9 +1339,8 @@ EXCEPTION
 END;
 $$;
 
--- ComponentesOK
 
--- Package
+-- ComponentesOK
 
 -- PC_VIDEOJUEGO
 CALL PC_VIDEOJUEGO.AD_VIDEOJUEGO(10, 'Arena Kings', 'Lucha');
@@ -1468,9 +1433,8 @@ CALL PC_TORNEO.ELI_TORNEO(10);
 -- PC_VIDEOJUEGO
 CALL PC_VIDEOJUEGO.ELI_VIDEOJUEGO(10);
 
--- Actores
 
--- Actores: implementación de los servicios de los actores
+-- Actores
 
 -- ADMINISTRADOR
 CREATE SCHEMA IF NOT EXISTS ADMINISTRADOR;
@@ -1828,40 +1792,66 @@ BEGIN
 END;
 $$;
 
--- Seguridad
 
--- Seguridad: definición de roles y permisos
+-- Seguridad
 
 -- Roles
 DO $$
+DECLARE
+    r TEXT;
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'rol_administrador') THEN
-        CREATE ROLE rol_administrador;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'rol_usuario') THEN
-        CREATE ROLE rol_usuario;
-    END IF;
+    FOREACH r IN ARRAY ARRAY['rol_administrador', 'rol_usuario'] LOOP
+        IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = r) THEN
+            BEGIN
+                EXECUTE format('CREATE ROLE %I', r);
+            EXCEPTION WHEN insufficient_privilege THEN
+                RAISE NOTICE 'Sin permiso para crear el rol %: se omiten sus permisos', r;
+                CONTINUE;
+            END;
+        END IF;
+        BEGIN
+            EXECUTE format('GRANT %I TO %I', r, current_user);
+        EXCEPTION WHEN OTHERS THEN
+            NULL;
+        END;
+    END LOOP;
 END;
 $$;
 
 -- Permisos
-REVOKE ALL ON ALL TABLES IN SCHEMA public FROM PUBLIC, rol_administrador, rol_usuario;
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA PC_TORNEO, PC_PREMIO, PC_CLASIFICACION, PC_PARTIDA, PC_VIDEOJUEGO, PC_PARTICIPANTE, PC_INSCRIPCION
-    FROM PUBLIC, rol_administrador, rol_usuario;
+    FROM PUBLIC;
 REVOKE EXECUTE ON ALL ROUTINES IN SCHEMA PC_TORNEO, PC_PREMIO, PC_CLASIFICACION, PC_PARTIDA, PC_VIDEOJUEGO, PC_PARTICIPANTE, PC_INSCRIPCION
     FROM PUBLIC;
 REVOKE EXECUTE ON ALL ROUTINES IN SCHEMA ADMINISTRADOR, USUARIO FROM PUBLIC;
 
-GRANT USAGE ON SCHEMA ADMINISTRADOR TO rol_administrador;
-GRANT EXECUTE ON ALL ROUTINES IN SCHEMA ADMINISTRADOR TO rol_administrador;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'rol_administrador') THEN
+        GRANT USAGE ON SCHEMA ADMINISTRADOR TO rol_administrador;
+        GRANT EXECUTE ON ALL ROUTINES IN SCHEMA ADMINISTRADOR TO rol_administrador;
+    END IF;
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'rol_usuario') THEN
+        GRANT USAGE ON SCHEMA USUARIO TO rol_usuario;
+        GRANT EXECUTE ON ALL ROUTINES IN SCHEMA USUARIO TO rol_usuario;
+    END IF;
+END;
+$$;
 
-GRANT USAGE ON SCHEMA USUARIO TO rol_usuario;
-GRANT EXECUTE ON ALL ROUTINES IN SCHEMA USUARIO TO rol_usuario;
 
 -- SeguridadOK
 
 -- ADMINISTRADOR
-SET ROLE rol_administrador;
+DO $$
+BEGIN
+    IF pg_has_role(current_user, (SELECT oid FROM pg_roles WHERE rolname = 'rol_administrador'), 'MEMBER') THEN
+        SET ROLE rol_administrador;
+    ELSE
+        RAISE NOTICE 'No se puede usar rol_administrador: se ejecuta con el usuario actual';
+    END IF;
+END;
+$$;
 CALL ADMINISTRADOR.AD_VIDEOJUEGO(40, 'Neon Racers', 'Deportivo');
 CALL ADMINISTRADOR.MOD_VIDEOJUEGO(40, 'Neon Racers X', 'Deportivo');
 CALL ADMINISTRADOR.AD_TORNEO(40, 8, '2099-05-01', 'Individual', 40);
@@ -1883,7 +1873,15 @@ COMMIT;
 RESET ROLE;
 
 -- USUARIO
-SET ROLE rol_usuario;
+DO $$
+BEGIN
+    IF pg_has_role(current_user, (SELECT oid FROM pg_roles WHERE rolname = 'rol_usuario'), 'MEMBER') THEN
+        SET ROLE rol_usuario;
+    ELSE
+        RAISE NOTICE 'No se puede usar rol_usuario: se ejecuta con el usuario actual';
+    END IF;
+END;
+$$;
 CALL USUARIO.AD_INSCRIPCION(40, NULL, 40);
 CALL USUARIO.AD_INSCRIPCION(41, NULL, 40);
 CALL USUARIO.AD_EQUIPO(40, 'Furia Roja', 40, 3);
@@ -1911,6 +1909,56 @@ SELECT USUARIO.CO_CLASIFICACION_TORNEO(1);
 FETCH ALL FROM co_clasificacion_torneo;
 COMMIT;
 RESET ROLE;
+
+-- ADMINISTRADOR
+DO $$
+BEGIN
+    IF pg_has_role(current_user, (SELECT oid FROM pg_roles WHERE rolname = 'rol_administrador'), 'MEMBER') THEN
+        SET ROLE rol_administrador;
+    ELSE
+        RAISE NOTICE 'No se puede usar rol_administrador: se ejecuta con el usuario actual';
+    END IF;
+END;
+$$;
+CALL ADMINISTRADOR.AD_PREMIO(40, 'Trofeo', 40, 41);
+CALL ADMINISTRADOR.MOD_PREMIO(40, 'Dinero', 40, 41);
+BEGIN;
+SELECT ADMINISTRADOR.CO_PREMIO();
+FETCH ALL FROM co_premio;
+COMMIT;
+CALL ADMINISTRADOR.ELI_PREMIO(40);
+CALL ADMINISTRADOR.ELI_CLASIFICACION(40);
+CALL ADMINISTRADOR.ELI_PARTIDA(40);
+RESET ROLE;
+
+-- USUARIO
+DO $$
+BEGIN
+    IF pg_has_role(current_user, (SELECT oid FROM pg_roles WHERE rolname = 'rol_usuario'), 'MEMBER') THEN
+        SET ROLE rol_usuario;
+    ELSE
+        RAISE NOTICE 'No se puede usar rol_usuario: se ejecuta con el usuario actual';
+    END IF;
+END;
+$$;
+CALL USUARIO.ELI_JUGADOR(41);
+CALL USUARIO.ELI_EQUIPO(40);
+RESET ROLE;
+
+-- ADMINISTRADOR
+DO $$
+BEGIN
+    IF pg_has_role(current_user, (SELECT oid FROM pg_roles WHERE rolname = 'rol_administrador'), 'MEMBER') THEN
+        SET ROLE rol_administrador;
+    ELSE
+        RAISE NOTICE 'No se puede usar rol_administrador: se ejecuta con el usuario actual';
+    END IF;
+END;
+$$;
+CALL ADMINISTRADOR.ELI_TORNEO(40);
+CALL ADMINISTRADOR.ELI_VIDEOJUEGO(40);
+RESET ROLE;
+
 
 -- Pruebas
 
